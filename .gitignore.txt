@@ -1,0 +1,11 @@
+*.sqlite3
+
+base/__pycache__
+
+ReviewBook/__pycache__
+
+*.gitignore
+
+*.db
+
+*.pyc
