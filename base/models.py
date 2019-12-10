@@ -68,3 +68,56 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_Label):
         return True
+
+class Genre(models.Model):
+    genre_name=models.CharField(max_length=200)
+    def __str__(self):
+        return self.genre_name
+
+class Director(models.Model):
+    director_name = models.CharField(max_length=200)
+    director_dob = models.DateField('Date of Birth')
+    director_description = models.TextField()
+    def __str__(self):
+        return self.director_name
+
+class Star(models.Model):
+    Star_name = models.CharField(max_length=200)
+    Star_dob = models.DateField('Date of Birth')
+    Star_description = models.TextField()
+    def __str__(self):
+        return self.Star_name
+
+class Publication(models.Model):
+    Publication_name = models.CharField(max_length= 500)
+    Publication_description = models.TextField()
+    def __str__(self):
+        return self.Publication_name
+
+class Movie(models.Model):
+    movie_name = models.CharField(max_length=400)
+    movie_date = models.DateField('date released')
+    movie_description = models.TextField()
+    movie_star = models.ManyToManyField(Star)
+    movie_genre= models.ForeignKey(Genre,on_delete=models.CASCADE)
+    movie_director= models.ForeignKey(Director,on_delete=models.CASCADE)
+    movie_runningtime = models.IntegerField()
+    movie_totalreview = models.IntegerField()
+    movie_nor = models.IntegerField()
+    movie_publication = models.ForeignKey(Publication,on_delete=models.CASCADE, null= True , blank = True)
+    movie_image = models.ImageField(upload_to='movies/' , max_length = 255 , null = True , blank = True)
+    def __str__(self):
+        return self.movie_name
+
+class Game(models.Model):
+    game_name = models.CharField(max_length=400)
+    game_date = models.DateField('date released')
+    game_description = models.TextField()
+    game_genre= models.ForeignKey(Genre,on_delete=models.CASCADE)
+    game_size= models.DecimalField(max_digits=6, decimal_places=2)
+    game_totalreview = models.IntegerField()
+    game_nor = models.IntegerField()
+    game_publication = models.ForeignKey(Publication,on_delete=models.CASCADE,null= True , blank = True)
+    game_image = models.ImageField(upload_to= 'games/', max_length = 255 , null= True , blank = True)
+    def __str__(self):
+        return self.game_name
