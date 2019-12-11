@@ -70,54 +70,96 @@ class Account(AbstractBaseUser):
         return True
 
 class Genre(models.Model):
-    genre_name=models.CharField(max_length=200)
+    genre_name = models.CharField(max_length=200)
+
     def __str__(self):
         return self.genre_name
 
 class Director(models.Model):
-    director_name = models.CharField(max_length=200)
-    director_dob = models.DateField('Date of Birth')
-    director_description = models.TextField()
+    director_name =        models.CharField(max_length=200)
+    director_dob =         models.DateField('Date of Birth')
+    director_description = models.TextField(blank=True)
+
     def __str__(self):
         return self.director_name
 
 class Star(models.Model):
-    Star_name = models.CharField(max_length=200)
-    Star_dob = models.DateField('Date of Birth')
-    Star_description = models.TextField()
+    star_name =          models.CharField(max_length=200)
+    star_dob =           models.DateField('Date of Birth')
+    star_description =   models.TextField(blank=True)
+
     def __str__(self):
-        return self.Star_name
+        return self.star_name
 
 class Publication(models.Model):
-    Publication_name = models.CharField(max_length= 500)
-    Publication_description = models.TextField()
+    publication_name =         models.CharField(max_length=500)
+    publication_description =  models.TextField(blank=True)
+
     def __str__(self):
-        return self.Publication_name
+        return self.publication_name
 
 class Movie(models.Model):
-    movie_name = models.CharField(max_length=400)
-    movie_date = models.DateField('date released')
-    movie_description = models.TextField()
-    movie_star = models.ManyToManyField(Star)
-    movie_genre= models.ForeignKey(Genre,on_delete=models.CASCADE)
-    movie_director= models.ForeignKey(Director,on_delete=models.CASCADE)
-    movie_runningtime = models.IntegerField()
-    movie_totalreview = models.IntegerField()
-    movie_nor = models.IntegerField()
-    movie_publication = models.ForeignKey(Publication,on_delete=models.CASCADE, null= True , blank = True)
-    movie_image = models.ImageField(upload_to='movies/' , max_length = 255 , null = True , blank = True)
+    movie_name =         models.CharField(max_length=400)
+    movie_date =         models.DateField('date released')
+    movie_description =  models.TextField(blank=True)
+    movie_star =         models.ManyToManyField(Star)
+    movie_genre =        models.ManyToManyField(Genre)
+    movie_director =     models.ForeignKey(Director, on_delete=models.CASCADE)
+    movie_runningtime =  models.DurationField()
+    movie_totalreview =  models.IntegerField(default=0)
+    movie_nor =          models.IntegerField(default=0)
+    movie_publication =  models.ForeignKey(Publication,on_delete=models.CASCADE, null=True, blank=True)
+    movie_image =        models.ImageField(upload_to='movies/', max_length=255, null=True, blank=True)
+    movie_avgreview =    models.DecimalField(default=0, max_digits=4, decimal_places=2)
+
     def __str__(self):
         return self.movie_name
 
 class Game(models.Model):
-    game_name = models.CharField(max_length=400)
-    game_date = models.DateField('date released')
-    game_description = models.TextField()
-    game_genre= models.ForeignKey(Genre,on_delete=models.CASCADE)
-    game_size= models.DecimalField(max_digits=6, decimal_places=2)
-    game_totalreview = models.IntegerField()
-    game_nor = models.IntegerField()
-    game_publication = models.ForeignKey(Publication,on_delete=models.CASCADE,null= True , blank = True)
-    game_image = models.ImageField(upload_to= 'games/', max_length = 255 , null= True , blank = True)
+    game_name =          models.CharField(max_length=400)
+    game_date =          models.DateField('date released')
+    game_description =   models.TextField(blank=True)
+    game_genre =         models.ManyToManyField(Genre)
+    game_size =          models.DecimalField(max_digits=6, decimal_places=2)
+    game_totalreview =   models.IntegerField(default=0)
+    game_nor =           models.IntegerField(default=0)
+    game_publication =   models.ForeignKey(Publication, on_delete=models.CASCADE, null=True, blank=True)
+    game_image =         models.ImageField(upload_to='games/', max_length=255, null=True, blank=True)
+    game_avgreview =     models.DecimalField(default=0, max_digits=4, decimal_places=2)
+
     def __str__(self):
         return self.game_name
+
+class TvShow(models.Model):
+    show_name =          models.CharField(max_length=400)
+    show_date =          models.DateField('first episode released')
+    show_description =   models.TextField(blank=True)
+    show_star =          models.ManyToManyField(Star)
+    show_genre =         models.ManyToManyField(Genre)
+    show_director=       models.ManyToManyField(Director)
+    show_runningtime =   models.DurationField()
+    show_totalepisode =  models.IntegerField(default=1)
+    show_totalreview =   models.IntegerField(default=0)
+    show_nor =           models.IntegerField(default=0)
+    show_publication =   models.ForeignKey(Publication, on_delete=models.CASCADE, null=True, blank=True)
+    show_image =         models.ImageField(upload_to='tvshows/', max_length=255, null=True, blank=True)
+    show_avgreview =     models.DecimalField(default=0, max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return self.show_name
+
+class Episode(models.Model):
+    episode_show_name =   models.ForeignKey(TvShow, on_delete=models.CASCADE)
+    episode_name =        models.CharField(max_length=400)
+    episode_number =      models.IntegerField()
+    episode_description = models.TextField(blank=True)
+    episode_date =        models.DateField('Edisode Release Date')
+    episode_director =    models.ManyToManyField(Director)
+    episode_runningtime = models.DurationField()
+    episode_totalreview = models.IntegerField(default=0)
+    episode_nor =         models.IntegerField(default=0)
+    episode_image =       models.ImageField(upload_to='episodes/', max_length=255, null=True, blank=True)
+    episode_avgreview =   models.DecimalField(default=0, max_digits=4, decimal_places=2)
+
+    def __str__(self):
+        return str(self.episode_number) + ". " + self.episode_name + ", " + self.episode_show_name.show_name
