@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base',
+    'accounts',
+    'games',
+    'movies',
+    'series',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-AUTH_USER_MODEL = 'base.Account'
+AUTH_USER_MODEL = 'accounts.Account'
 
 WSGI_APPLICATION = 'ReviewBook.wsgi.application'
 

@@ -1,0 +1,7 @@
+*.sqlite3
+
+objects/__pycache__
+
+CollegePermissions/__pycache__
+
+.gitignore
