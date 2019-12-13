@@ -1,7 +1,15 @@
 *.sqlite3
 
-objects/__pycache__
+base/__pycache__
 
-CollegePermissions/__pycache__
+games/__pycache__
+
+movies/__pycache__
+
+series/__pycache__
+
+accounts/__pycache__
+
+ReviewBook/__pycache__
 
 .gitignore
