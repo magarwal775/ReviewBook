@@ -30,7 +30,7 @@ class Movie(models.Model):
     def __str__(self):
         return self.name
 
-class Review(models.Model):
+class MovieReview(models.Model):
     title = models.CharField(max_length=50, null=False, blank=False)
     body = models.TextField(max_length=5000, null=False, blank=False)
     rating = models.IntegerField()
@@ -51,4 +51,4 @@ def pre_save_review_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.movie.name + "-" + instance.author.username + "-" +instance.title)
 
-pre_save.connect(pre_save_review_receiver, sender=Review)
+pre_save.connect(pre_save_review_receiver, sender=MovieReview)

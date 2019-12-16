@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for each in series %}
+  <p>{{each.image}}</p>
+  <p><a href="{% url 'select_episode' each.id %}">{{each.name}}</a></p>
+  <br>
+{% endfor %}
+
+{% endblock content %}

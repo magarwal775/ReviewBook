@@ -3,3 +3,9 @@ from django.urls import reverse
 
 def base(request):
     return render(request, 'base.html')
+
+def home(request):
+    return render(request, 'home.html')
+
+def select_category(request):
+    return render(request, 'select_category.html')
