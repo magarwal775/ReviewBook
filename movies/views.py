@@ -21,7 +21,7 @@ def give_movie_review(request, movie_id):
     user = request.user
     movie = get_object_or_404(Movie, id=movie_id)
     if not user.is_authenticated:
-        return redirect('must_authenticate')
+        return redirect('accounts:must_authenticate')
 
     form = GiveReviewForm(request.POST or None)
     if form.is_valid():

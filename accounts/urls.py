@@ -8,6 +8,9 @@ from accounts.views import (
         account_view,
 )
 
+app_name='accounts'
+
+
 urlpatterns = [
     path('register/', registration_view, name="register"),
     path('logout/', logout_view, name="logout"),

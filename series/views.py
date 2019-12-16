@@ -11,7 +11,7 @@ def give_episode_review(request, episode_id):
     user = request.user
     episode = get_object_or_404(Episode, id=episode_id)
     if not user.is_authenticated:
-        return redirect('must_authenticate')
+        return redirect('accounts:must_authenticate')
 
     form = GiveReviewForm(request.POST or None)
     if form.is_valid():

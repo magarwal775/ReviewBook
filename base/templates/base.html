@@ -1,71 +1,35 @@
-<html lang="en">
-  <head>
+<!DOCTYPE html>
+<html lang=en>
 
+<head>
+	<!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
 
-  </head>
-  <style>
+<body>
+{% include 'snippets/base_css.html' %}
+{% include 'snippets/header.html' %}
 
-    #topbar{
-      background: grey;
-      padding-top:8px;
-      padding-bottom:10px;
-      text-align:center;
-    }
+<!-- Body -->
+<style type="text/css">
+	.main{
+		min-height: 100vh;
+		height: 100%;
+	}
+</style>
+<div class="main">
+	{% block content %}
 
-    h2{display: inline;}
+	{% endblock content %}
+</div>
+<!-- End Body -->
 
-    #login{
-      padding-top:5px;
-    }
+{% include 'snippets/footer.html' %}
 
-  </style>
-  <body>
+</body>
 
-    <!--navbar-->
-    {% if request.user.is_authenticated %}
-      <div id='topbar' class='jumbotron'>
-        <h2>ReviewBook</h2>
-        <div id='login' style="float:right;">
-          <a href="#">
-            <button class="btn btn-sm  my-2 my-sm-0 m-1 navBtn">
-              <strong>{{request.user.first_name}}</strong>
-            </button>
-          </a>
-          <a href="{% url 'logout' %}">
-            <button class="btn btn-sm  my-2 my-sm-0 m-1 navBtn">
-              <strong>Logout</strong>
-            </button>
-          </a>
-        </div>
-      </div>
-      {% else %}
-        <div id='topbar' class='jumbotron'>
-        <h2>ReviewBook</h2>
-        <div id='login' style="float:right;">
-          <a href="{% url 'login' %}">
-            <button class="btn btn-sm  my-2 my-sm-0 m-1 navBtn">
-              <strong>Login</strong>
-            </button>
-          </a>
-          <a href="{% url 'register' %}">
-            <button class="btn btn-sm  my-2 my-sm-0 m-1 navBtn">
-              <strong>Register</strong>
-            </button>
-          </a>
-        </div>
-      </div>
-    {% endif %}
 
-    {% block content %}
-    {% endblock content %}
-
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-  </body>
 </html>
