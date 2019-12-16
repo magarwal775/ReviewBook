@@ -1,5 +1,5 @@
 from django.contrib import admin
-from movies.models import Movie
+from movies.models import Movie, Review
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'releasedate', 'runningtime', 'avgreview', 'director', 'publication',)
@@ -11,3 +11,4 @@ class MovieAdmin(admin.ModelAdmin):
     fieldsets = ()
 
 admin.site.register(Movie, MovieAdmin)
+admin.site.register(Review)

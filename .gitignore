@@ -1,7 +1,13 @@
-*.sqlite3
+*.log
 
-objects/__pycache__
+*.pot
 
-CollegePermissions/__pycache__
+*.pyc
 
-.gitignore
+__pycache__
+
+db.sqlite3
+
+media
+
+media_cdn
