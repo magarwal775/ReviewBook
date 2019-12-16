@@ -1,8 +1,17 @@
-from django.shortcuts import render, get_object_or_404, redirect
-
+from django.shortcuts import get_object_or_404,render,redirect
+from django.urls import reverse
 from movies.models import MovieReview, Movie
 from movies.forms import GiveReviewForm
 from accounts.models import Account
+
+def index(request):
+    movie_list= Movie.objects.order_by('-name')
+    context = {'movie_list':movie_list}
+    return render(request,'movies/movielist.html',context)
+
+def details(request,movie_id):
+    movie= get_object_or_404(Movie,pk=movie_id)
+    return render(request,'movies/details.html',{'movie':movie})
 
 def give_movie_review(request, movie_id):
 

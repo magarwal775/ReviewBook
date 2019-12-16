@@ -30,3 +30,12 @@ def select_game(request):
     context ={'games':games}
 
     return render(request, 'select_game.html', context)
+
+def index(request):
+    game_list= Game.objects.order_by('-name')
+    context = {'game_list':game_list}
+    return render(request,'games/gamelist.html',context)
+
+def details(request,game_id):
+    game= get_object_or_404(Game,pk=game_id)
+    return render(request,'games/details.html',{'game':game})
