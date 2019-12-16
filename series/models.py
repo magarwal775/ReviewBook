@@ -79,6 +79,6 @@ class EpisodeReview(models.Model):
 
 def pre_save_review_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = slugify(instance.episode.show_name + "-" + instance.episode.episode_name + "-" + instance. instance.author.username + "-" + instance.title)
+        instance.slug = slugify(instance.episode.show_name.name + "-" + instance.episode.episode_name + "-" + instance.author.username + "-" + instance.title)
 
 pre_save.connect(pre_save_review_receiver, sender=EpisodeReview)

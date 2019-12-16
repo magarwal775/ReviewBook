@@ -4,7 +4,7 @@
 
 {% for game in games %}
   <p>{{game.image}}</p>
-  <p><a href="{% url 'give_game_review' game.id %}">{{game.name}}</p>
+  <p><a href="{% url 'games:give_game_review' game.id %}">{{game.name}}</p>
   <br>
 {% endfor %}
 

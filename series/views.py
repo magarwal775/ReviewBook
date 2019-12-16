@@ -32,7 +32,7 @@ def select_series(request):
     return render(request, 'select_series.html', context)
 
 def select_episode(request, series_id):
-    episodes = Episode.objects.all()
+    episodes = Episode.objects.filter(show_name_id=series_id)
     context = {'episodes':episodes}
 
     return render(request, 'select_episode.html', context)

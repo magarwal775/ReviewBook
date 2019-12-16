@@ -2,8 +2,8 @@
 
 {% block content %}
 
-  <h3><a href="{% url 'select_movie' %}">Movies</a></h3>
-  <h3><a href="{% url 'select_game' %}">Games</a></h3>
-  <h3><a href="{% url 'select_series' %}">Series</a></h3>
+  <h3><a href="{% url 'movies:select_movie' %}">Movies</a></h3>
+  <h3><a href="{% url 'games:select_game' %}">Games</a></h3>
+  <h3><a href="{% url 'series:select_series' %}">Series</a></h3>
 
 {% endblock content %}

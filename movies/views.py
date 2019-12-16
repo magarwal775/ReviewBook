@@ -11,7 +11,8 @@ def index(request):
 
 def details(request,movie_id):
     movie= get_object_or_404(Movie,pk=movie_id)
-    return render(request,'movies/details.html',{'movie':movie})
+    context = {'movie':movie}
+    return render(request,'movies/details.html',context)
 
 def give_movie_review(request, movie_id):
 

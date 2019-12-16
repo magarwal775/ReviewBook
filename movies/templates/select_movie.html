@@ -4,7 +4,7 @@
 
 {% for movie in movies %}
   <p>{{movie.image}}</p>
-  <p><a href="{% url 'give_movie_review' movie.id %}">{{movie.name}}</a></p>
+  <p><a href="{% url 'movies:give_movie_review' movie.id %}">{{movie.name}}</a></p>
   <br>
 {% endfor %}
 
