@@ -3,6 +3,10 @@ from django.contrib.auth import login, authenticate, logout
 from accounts.forms import RegistrationForm, AccountAuthenticationForm
 from django.urls import reverse
 
+from games.models import GameReview
+from movies.models import MovieReview
+from series.models import EpisodeReview
+
 def registration_view(request):
     context = {}
     if request.POST:
@@ -13,7 +17,7 @@ def registration_view(request):
             raw_password = form.cleaned_data.get('password1')
             account = authenticate(email=email, password=raw_password)
             login(request, account)
-            return redirect('home')
+            return redirect('base:home')
         else:
             context['registration_form'] = form
     else:
@@ -23,7 +27,7 @@ def registration_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect("base:home")
 
 
 def login_view(request):
@@ -43,10 +47,29 @@ def login_view(request):
 
             if user:
                 login(request, user)
-                return redirect("home")
+                return redirect("base:home")
 
     else:
         form=AccountAuthenticationForm()
 
     context['login_form'] = form
     return render(request, 'account/login.html', context)
+
+def account_view(request):
+
+    if not request.user.is_authenticated:
+        return redirect("accounts:must_authenticate")
+
+    context ={}
+
+    movie_review = MovieReview.objects.filter(author=request.user)
+    game_review = GameReview.objects.filter(author=request.user)
+    episode_review = EpisodeReview.objects.filter(author=request.user)
+    context['movie_review'] = movie_review
+    context['game_review'] = game_review
+    context['episode_review'] = episode_review
+
+    return render(request, "account_view.html", context)
+
+def must_authenticate_view(request):
+    return render(request, 'must_authenticate.html', {})

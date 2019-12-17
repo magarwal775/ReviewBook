@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for episode in episodes %}
+  <p>{{episode.image}}</p>
+  <p><a href="{% url 'series:give_episode_review' episode.id %}">Season {{episode.season_number}}, episode {{episode.episode_number}}, {{episode.name}}</a></p>
+  <br>
+{% endfor %}
+
+{% endblock content %}

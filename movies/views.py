@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404,render,redirect
 from django.urls import reverse
-from .models import Movie
-
-
+from movies.models import MovieReview, Movie
+from movies.forms import GiveReviewForm
+from accounts.models import Account
 
 def index(request):
     movie_list= Movie.objects.order_by('-name')
@@ -11,7 +11,33 @@ def index(request):
 
 def details(request,movie_id):
     movie= get_object_or_404(Movie,pk=movie_id)
-    return render(request,'movies/details.html',{'movie':movie})
+    context = {'movie':movie}
+    return render(request,'movies/details.html',context)
 
+def give_movie_review(request, movie_id):
 
-# Create your views here.
+    context = {}
+
+    user = request.user
+    movie = get_object_or_404(Movie, id=movie_id)
+    if not user.is_authenticated:
+        return redirect('accounts:must_authenticate')
+
+    form = GiveReviewForm(request.POST or None)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.movie = movie
+        obj.author = user
+        obj.save()
+        form = GiveReviewForm()
+
+    context['form']=form
+
+    return render(request, 'give_movie_review.html', context)
+
+def select_movie(request):
+
+    movies = Movie.objects.all()
+    context ={'movies':movies}
+
+    return render(request, 'select_movie.html', context)

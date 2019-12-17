@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% for game in games %}
+  <p>{{game.image}}</p>
+  <p><a href="{% url 'games:give_game_review' game.id %}">{{game.name}}</p>
+  <br>
+{% endfor %}
+
+{% endblock content %}
