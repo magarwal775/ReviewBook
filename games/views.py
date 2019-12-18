@@ -20,6 +20,7 @@ def give_game_review(request, game_id):
         obj.author = user
         obj.save()
         form = GiveReviewForm()
+        return redirect('games:review_detail', obj.slug)
 
     context['form']=form
 
@@ -39,3 +40,10 @@ def index(request):
 def details(request,game_id):
     game= get_object_or_404(Game,pk=game_id)
     return render(request,'games/details.html',{'game':game})
+
+def review_detail(request, slug):
+    context = {}
+    review = get_object_or_404(GameReview, slug=slug)
+    context['review']=review
+
+    return render(request, 'games/review_detail.html', context)

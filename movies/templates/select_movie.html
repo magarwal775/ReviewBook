@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block content %}
 
 {% for movie in movies %}
-  <img class="img-fluid d-block m-auto pb-2" src="{% static '{{movie.image}}' %}" width="72" height="72">
-  <p>{{movie.image}}</p>
-  <p><a href="{% url 'movies:give_movie_review' movie.id %}">{{movie.name}}</a></p>
+  <a href="{% url 'movies:give_movie_review' movie.id %}">
+    <img src="{{movie.image.url}}" width="200" height="250">
+    <p>{{movie.name}}</p>
+  </a>
   <br>
 {% endfor %}
 

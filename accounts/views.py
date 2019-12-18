@@ -60,7 +60,7 @@ def account_view(request):
     if not request.user.is_authenticated:
         return redirect("accounts:must_authenticate")
 
-    context ={}
+    context = {}
 
     movie_review = MovieReview.objects.filter(author=request.user)
     game_review = GameReview.objects.filter(author=request.user)

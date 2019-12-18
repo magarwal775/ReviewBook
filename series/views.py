@@ -20,6 +20,7 @@ def give_episode_review(request, episode_id):
         obj.author = user
         obj.save()
         form = GiveReviewForm()
+        return redirect('series:review_detail', obj.slug)
 
     context['form']=form
 
@@ -36,3 +37,10 @@ def select_episode(request, series_id):
     context = {'episodes':episodes}
 
     return render(request, 'select_episode.html', context)
+
+def review_detail(request, slug):
+    context = {}
+    review = get_object_or_404(EpisodeReview, slug=slug)
+    context['review']=review
+
+    return render(request, 'series/review_detail.html', context)

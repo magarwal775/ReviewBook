@@ -30,6 +30,7 @@ def give_movie_review(request, movie_id):
         obj.author = user
         obj.save()
         form = GiveReviewForm()
+        return redirect('movies:review_detail', obj.slug)
 
     context['form']=form
 
@@ -41,3 +42,10 @@ def select_movie(request):
     context ={'movies':movies}
 
     return render(request, 'select_movie.html', context)
+
+def review_detail(request, slug):
+    context = {}
+    review = get_object_or_404(MovieReview, slug=slug)
+    context['review']=review
+
+    return render(request, 'movies/review_detail.html', context)
