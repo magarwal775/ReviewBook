@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404,render,redirect
 from django.urls import reverse
 from movies.models import MovieReview, Movie
-from movies.forms import GiveReviewForm
+from movies.forms import GiveReviewForm, UpdateReviewForm
 from accounts.models import Account
 
 def index(request):
@@ -49,3 +49,30 @@ def review_detail(request, slug):
     context['review']=review
 
     return render(request, 'movies/review_detail.html', context)
+
+def edit_review(request, slug):
+
+    context = {}
+
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('accounts:must_authenticate')
+
+    review = get_object_or_404(MovieReview, slug=slug)
+    if request.POST:
+        form = UpdateReviewForm(request.POST or None, instance=review)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            context['success_message'] = "Updated"
+            review = obj
+    form = UpdateReviewForm(
+            initial = {
+                    "title": review.title,
+                    "body": review.body,
+                    "rating": review.rating,
+                }
+    )
+
+    context['form'] = form
+    return render(request, 'movies/edit_review.html', context)
