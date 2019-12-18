@@ -1,0 +1,33 @@
+<style type="text/css">
+	.card{
+		max-width: 700px;
+	}
+	.card-body{
+		padding: 20px;
+	}
+</style>
+
+<div class="container">
+	<div class="row">
+
+		<!-- Review Post -->
+		<div class="card m-auto">
+			<a href="{% url 'series:review_detail' episodereview.slug %}">
+				<img class="card-img-top" src="{{episodereview.episode.image.url}}">
+			</a>
+
+			<div class="card-body mt-2 mb-2">
+				<a href="{% url 'series:review_detail' episodereview.slug %}">
+					<h2 class="card-title">{{episodereview.title}}</h2>
+				</a>
+				<p class="card-text">{{episodereview.body}}</p>
+				{% if episodereview.author == request.user %}
+					<a href="{% url 'series:edit_review' episodereview.slug %}" class="btn btn-primary">Update</a>
+				{% endif %}
+			</div>
+			<div class="card-footer text-muted">
+			  Updated on {{episodereview.date_updated}} by {{episodereview.author}}
+			</div>
+		</div>
+	</div>
+</div>

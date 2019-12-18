@@ -1,3 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<style>
+  .h3{
+    text-align: center;
+  }
+  .posts{
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+  }
+</style>
+
+<div class="container mt-4 p-4">
+  <div class="row">
+    <div class="posts">
+      <h3 class="mb-3 font-weight-normal">My Review Posts</h3>
+      {% if movie_review %}
+        <ul>
+          {% for moviereview in movie_review %}
+            <a href="{% url 'movies:review_detail' moviereview.slug %}" style="text-decoration: none;">
+              <li class="list-group-item">
+                <h3>{{moviereview.movie.name}}</h3>
+                <p>{{moviereview}}</p>
+              </li>
+            </a>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>You have not reviewed any Movies. <a href="{% url 'movies:select_movie' %}">Review now!</a></p>
+      {% endif %}
+
+      {% if game_review %}
+        <ul>
+          {% for gamereview in game_review %}
+            <a href="{% url 'games:review_detail' gamereview.slug %}" style="text-decoration: none;">
+              <li class="list-group-item">
+                <h3>{{gamereview.game.name}}</h3>
+                <p>{{gamereview}}</p>
+              </li>
+            </a>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>You have not reviewed any Games. <a href="{% url 'games:select_game' %}">Review now!</a></p>
+      {% endif %}
+
+      {% if episode_review %}
+        <ul>
+          {% for episodereview in episode_review %}
+            <a href="{% url 'series:review_detail' episodereview.slug %}" style="text-decoration: none;">
+              <li class="list-group-item">
+                <h3>{{episodereview.episode.show_name.name}}, Season {{episodereview.episode.season_number}}, Episode {{episodereview.episode.episode_number}}</h3>
+                <p>{{episodereview}}</p>
+              </li>
+            </a>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>You have not reviewed any Episodes. <a href="{% url 'series:select_series' %}">Review now!</a></p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -3,8 +3,10 @@
 {% block content %}
 
 {% for episode in episodes %}
-  <p>{{episode.image}}</p>
-  <p><a href="{% url 'series:give_episode_review' episode.id %}">Season {{episode.season_number}}, episode {{episode.episode_number}}, {{episode.name}}</a></p>
+  <a href="{% url 'series:give_episode_review' episode.id %}">
+    <img src="{{episode.image.url}}" width="200" height="250">
+    <p>Season {{episode.season_number}}, episode {{episode.episode_number}}, {{episode.name}}</p>
+    </a>
   <br>
 {% endfor %}
 

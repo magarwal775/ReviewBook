@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style type="text/css">
+
+  .card{
+      max-width: 700px;
+  }
+
+  .container{
+      padding: 20px;
+  }
+
+</style>
+
+<div class="container">
+  <div class="row">
+
+    <!--Review Post-->
+    <div class="card m-auto">
+      <img class="card-img-top" src="{{review.movie.image.url}}">
+      <div class="card-body my-2">
+        <h3>Movie: {{review.movie.name}}</h3>
+        <h2>{{review.title}}</h2>
+        <p>Ratings: {{review.rating}}/10</p>
+        <p class="card-text">{{review.body}}</p>
+        {% if review.author == request.user %}
+          <a href="{% url 'movies:edit_review' review.slug %}" class="btn btn-primary">Edit</a>
+        {% endif %}
+      </div>
+      <div class="card-footer text-muted">
+        Posted on {{review.date_published}} by {{review.author.username}}, last updated on {{review.date_updated}}
+    </div>
+    <!--End Review Post-->
+  </div>
+</div>
+
+{% endblock content %}
