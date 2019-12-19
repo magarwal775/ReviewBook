@@ -20,27 +20,13 @@ class Game(models.Model):
     genre =         models.ManyToManyField(Genre)
     size =          models.DecimalField(max_digits=6, decimal_places=2, blank=True)
     totalreview =   models.IntegerField(default=0)
-    nor =           models.IntegerField(default=0)
+    totalrating =   models.IntegerField(default=0)
     publication =   models.ForeignKey(Publication, on_delete=models.CASCADE, null=True, blank=True)
     image =         models.ImageField(upload_to=upload_location, null=False, blank=False)
-    avgreview =     models.DecimalField(default=0, max_digits=4, decimal_places=2)
+    avgrating =     models.DecimalField(default=0, max_digits=4, decimal_places=2)
 
     def __str__(self):
         return self.name
-
-    def no_of_ratings(self):
-        ratings= GameReview.objects.filter(game=self)
-        return len(ratings)
-
-    def avg_rating(self):
-        sum=0
-        ratings= GameReview.objects.filter(game=self)
-        for r in ratings:
-            sum+=r.rating
-        if len(ratings)> 0:
-            return sum/len(ratings)
-        else:
-            return 0
 
 class GameReview(models.Model):
     title =              models.CharField(max_length=50, null=False, blank=False)
@@ -54,6 +40,42 @@ class GameReview(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super(GameReview, self).save(*args, **kwargs)
+        game = Game.objects.get(id=self.game_id)
+        r = self.rating
+        game.totalreview = game.totalreview + 1
+        game.totalrating = game.totalrating + r
+        game.save()
+        game.avgrating = game.totalrating/game.totalreview
+        game.save()
+
+    def delete(self, *args, **kwargs):
+        game = Game.objects.get(id=self.game_id)
+        r = self.rating
+        game.totalreview = game.totalreview - 1
+        game.totalrating = game.totalrating - r
+        game.save()
+        if(game.totalreview != 0):
+            game.avgrating = game.totalrating/game.totalreview
+        else:
+            game.avgrating = 0
+        game.save()
+        super(GameReview, self).delete(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        super(GameReview, self).save(*args, **kwargs)
+        game = Game.objects.get(id=self.game_id)
+        allreview = GameReview.objects.filter(game=game)
+        totalrat = 0
+        for each in allreview:
+            totalrat = totalrat + each.rating
+        game.totalrating = totalrat
+        game.totalreview = len(allreview)
+        game.save()
+        game.avgrating = game.totalrating/game.totalreview
+        game.save()
 
 @receiver(post_delete, sender=Game)
 def submission_delete(sender, instance, **kwargs):

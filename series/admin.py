@@ -11,7 +11,7 @@ class SeriesAdmin(admin.ModelAdmin):
     fieldsets = ()
 
 class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('show_name', 'episode_name', 'episode_number', 'release_date', 'running_time', 'avg_review',)
+    list_display = ('show_name', 'episode_name', 'episode_number', 'release_date', 'running_time', 'avgrating',)
     search_fields = ('show_name', 'episode_name', 'publication',)
     readonly_fields = ()
 
