@@ -6,4 +6,5 @@
 <h3><b> Size: </b>{{game.size}}MB</h3>
 <h3><b>Genre: </b>{% for genre in game.genre.all %}{{genre.genre_name}}, {% endfor %}</h3>
 <h3><b>Produced By: </b>{{game.publication}}</h3>
+<h3><b>Average Rating: </b>{{game.avg_rating}}</h3>
 {% endblock content %}
