@@ -48,28 +48,13 @@ class Episode(models.Model):
     release_date =   models.DateField('Edisode Release Date')
     director =       models.ManyToManyField(Director)
     running_time =   models.DurationField()
-    total_review =   models.IntegerField(default=0)
-    nor =            models.IntegerField(default=0)
+    totalreview =    models.IntegerField(default=0)
+    totalrating =    models.IntegerField(default=0)
     image =          models.ImageField(upload_to=upload_location_episode, null=False, blank=False)
-    avg_review =     models.DecimalField(default=0, max_digits=4, decimal_places=2)
+    avgrating =      models.DecimalField(default=0, max_digits=4, decimal_places=2)
 
     def __str__(self):
         return self.show_name.name + ", Season " + str(self.season_number) + ", Episode " + str(self.episode_number)
-
-    def no_of_ratings(self):
-        ratings= EpisodeReview.objects.filter(episode=self)
-        return len(ratings)
-
-    def avg_rating(self):
-        sum=0
-        ratings= EpisodeReview.objects.filter(episode=self)
-        for r in ratings:
-            sum+=r.rating
-        if len(ratings)> 0:
-            return sum/len(ratings)
-        else:
-            return 0
-
 
 @receiver(post_delete, sender=Series)
 def submission_delete(sender, instance, **kwargs):
@@ -91,6 +76,42 @@ class EpisodeReview(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super(EpisodeReview, self).save(*args, **kwargs)
+        episode = Episode.objects.get(id=self.episode_id)
+        r = self.rating
+        episode.totalreview = episode.totalreview + 1
+        episode.totalrating = episode.totalrating + r
+        episode.save()
+        episode.avgrating = episode.totalrating/episode.totalreview
+        episode.save()
+
+    def delete(self, *args, **kwargs):
+        episode = Episode.objects.get(id=self.game_id)
+        r= self.rating
+        episode.totalreview = episode.totalreview - 1
+        episode.totalrating = episode.totalrating - r
+        episode.save()
+        if(episode.totalreview != 0):
+            episode.avgrating = episode.totalrating/episode.totalreview
+        else:
+            episode.avgrating = 0
+        episode.save()
+        super(EpisodeReview, self).delete(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        super(EpisodeReview, self).save(*args, **kwargs)
+        episode = Episode.objects.get(id=self.episode_id)
+        allreview = EpisodeReview.objects.filter(episode=episode)
+        totalrat = 0
+        for each in allreview:
+            totalrat = totalrat + each.rating
+        episode.totalrating = totalrat
+        episode.totalreview = len(allreview)
+        episode.save()
+        episode.avgrating = episode.totalrating/episode.totalreview
+        episode.save()
 
 def pre_save_review_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:

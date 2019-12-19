@@ -22,27 +22,13 @@ class Movie(models.Model):
     director =     models.ForeignKey(Director, on_delete=models.CASCADE)
     runningtime =  models.DurationField()
     totalreview =  models.IntegerField(default=0)
-    nor =          models.IntegerField(default=0)
+    totalrating =  models.IntegerField(default=0)
     publication =  models.ForeignKey(Publication,on_delete=models.CASCADE, null=True, blank=True)
     image =        models.ImageField(upload_to=upload_location, null=False, blank=False)
-    avgreview =    models.DecimalField(default=0, max_digits=4, decimal_places=2)
+    avgrating =    models.DecimalField(default=0, max_digits=4, decimal_places=2)
 
     def __str__(self):
         return self.name
-
-    def no_of_ratings(self):
-        ratings= MovieReview.objects.filter(movie=self)
-        return len(ratings)
-
-    def avg_rating(self):
-        sum=0
-        ratings= MovieReview.objects.filter(movie=self)
-        for r in ratings:
-            sum+=r.rating
-        if len(ratings)> 0:
-            return sum/len(ratings)
-        else:
-            return 0
 
 class MovieReview(models.Model):
     title = models.CharField(max_length=50, null=False, blank=False)
@@ -56,6 +42,42 @@ class MovieReview(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super(MovieReview, self).save(*args, **kwargs)
+        movie = Movie.objects.get(id=self.movie_id)
+        r = self.rating
+        movie.totalreview = movie.totalreview + 1
+        movie.totalrating = movie.totalrating + r
+        movie.save()
+        movie.avgrating = movie.totalrating/movie.totalreview
+        movie.save()
+
+    def delete(self, *args, **kwargs):
+        movie = Movie.objects.get(id=self.movie_id)
+        r= self.rating
+        movie.totalreview = movie.totalreview - 1
+        movie.totalrating = movie.totalrating - r
+        movie.save()
+        if(movie.totalreview != 0):
+            movie.avgrating = movie.totalrating/movie.totalreview
+        else:
+            movie.avgrating = 0
+        movie.save()
+        super(MovieReview, self).delete(*args, **kwargs)
+
+    def update(self, *args, **kwargs):
+        super(MovieReview, self).save(*args, **kwargs)
+        movie = Movie.objects.get(id=self.movie_id)
+        allreview = MovieReview.objects.filter(movie=movie)
+        totalrat = 0
+        for each in allreview:
+            totalrat = totalrat + each.rating
+        movie.totalrating = totalrat
+        movie.totalreview = len(allreview)
+        movie.save()
+        movie.avgrating = movie.totalrating/movie.totalreview
+        movie.save()
 
 @receiver(post_delete, sender=Movie)
 def submission_delete(sender, instance, **kwargs):
