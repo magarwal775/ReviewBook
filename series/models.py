@@ -56,6 +56,21 @@ class Episode(models.Model):
     def __str__(self):
         return self.show_name.name + ", Season " + str(self.season_number) + ", Episode " + str(self.episode_number)
 
+    def no_of_ratings(self):
+        ratings= EpisodeReview.objects.filter(episode=self)
+        return len(ratings)
+
+    def avg_rating(self):
+        sum=0
+        ratings= EpisodeReview.objects.filter(episode=self)
+        for r in ratings:
+            sum+=r.rating
+        if len(ratings)> 0:
+            return sum/len(ratings)
+        else:
+            return 0
+
+
 @receiver(post_delete, sender=Series)
 def submission_delete(sender, instance, **kwargs):
     instance.image.delete(False)

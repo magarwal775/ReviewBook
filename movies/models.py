@@ -30,6 +30,20 @@ class Movie(models.Model):
     def __str__(self):
         return self.name
 
+    def no_of_ratings(self):
+        ratings= MovieReview.objects.filter(movie=self)
+        return len(ratings)
+
+    def avg_rating(self):
+        sum=0
+        ratings= MovieReview.objects.filter(movie=self)
+        for r in ratings:
+            sum+=r.rating
+        if len(ratings)> 0:
+            return sum/len(ratings)
+        else:
+            return 0
+
 class MovieReview(models.Model):
     title = models.CharField(max_length=50, null=False, blank=False)
     body = models.TextField(max_length=5000, null=False, blank=False)

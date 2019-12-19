@@ -8,4 +8,5 @@
 <h3><b>Genre: </b>{% for genre in movie.genre.all %}{{genre.genre_name}}, {% endfor %}</h3>
 <h3><b>Running time: </b>{{movie.runningtime}}</h3>
 <h3><b>Produced By: </b>{{movie.publication}}</h3>
+<h3><b>Rating: </b>{{movie.avg_rating}}</h3>
 {% endblock content %}
