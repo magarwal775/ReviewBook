@@ -43,17 +43,17 @@ class MyAccountManager(BaseUserManager):
         return user
 
 class Account(AbstractBaseUser):
-    email =        models.EmailField(verbose_name="EmailId", max_length=100, unique=True)
-    username =     models.CharField(max_length=40, unique=True)
-    date_joined =  models.DateTimeField(verbose_name="Date Joined", auto_now_add=True)
-    last_login =   models.DateTimeField(verbose_name="Last Login", auto_now=True)
-    is_admin =     models.BooleanField(default=False)
-    is_active =    models.BooleanField(default=True)
-    is_staff =     models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    first_name =   models.CharField(max_length=100)
-    last_name =    models.CharField(max_length=100)
-    dob =          models.DateField()
+    email =         models.EmailField(verbose_name="EmailId", max_length=100, unique=True)
+    username =      models.CharField(max_length=40, unique=True)
+    date_joined =   models.DateTimeField(verbose_name="Date Joined", auto_now_add=True)
+    last_login =    models.DateTimeField(verbose_name="Last Login", auto_now=True)
+    is_admin =      models.BooleanField(default=False)
+    is_active =     models.BooleanField(default=True)
+    is_staff =      models.BooleanField(default=False)
+    is_superuser =  models.BooleanField(default=False)
+    first_name =    models.CharField(max_length=100)
+    last_name =     models.CharField(max_length=100)
+    dob =           models.DateField()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name','dob']

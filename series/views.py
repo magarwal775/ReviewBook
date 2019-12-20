@@ -13,18 +13,21 @@ def give_episode_review(request, episode_id):
     if not user.is_authenticated:
         return redirect('accounts:must_authenticate')
 
-    form = GiveReviewForm(request.POST or None)
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.episode = episode
-        obj.author = user
-        obj.save()
-        form = GiveReviewForm()
-        return redirect('series:review_detail', obj.slug)
+    review = EpisodeReview.objects.filter(episode_id=episode_id, author=request.user)
+    if len(review)==0:
+        form = GiveReviewForm(request.POST or None)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.episode = episode
+            obj.author = user
+            obj.save()
+            form = GiveReviewForm()
+            return redirect('series:review_detail', obj.slug)
 
-    context['form']=form
-
-    return render(request, 'give_episode_review.html', context)
+        context['form']=form
+        return render(request, 'give_episode_review.html', context)
+    else:
+        return redirect('series:review_detail', review[0].slug)
 
 def select_series(request):
     series = Series.objects.all()
