@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{%block content%}
+
+{% for review in movie_review%}
+<p><b>Author</b>: {{review.author.username}}
+   <b>Movie</b>: {{review.movie}}
+   <b>Title</b>: {{review.title}}
+   <b>Body</b>: {{review.body}}
+   <b>Rating</b>: {{review.rating}}
+</p>
+<br>
+{% endfor %}
+{%endblock%}

@@ -6,6 +6,7 @@ from django.urls import reverse
 from games.models import GameReview
 from movies.models import MovieReview
 from series.models import EpisodeReview
+from accounts.models import UserFollow, Account
 
 def registration_view(request):
     context = {}
@@ -73,3 +74,12 @@ def account_view(request):
 
 def must_authenticate_view(request):
     return render(request, 'must_authenticate.html', {})
+
+
+def feed_view(request):
+    if not request.user.is_authenticated:
+        return redirect("accounts:must_authenticate")
+    followers = request.user.Following.all()
+    movie_review=MovieReview.objects.filter(author__in= followers).order_by('-date_published')
+    context = {'movie_review':movie_review}
+    return render(request,'account/feed.html',context)

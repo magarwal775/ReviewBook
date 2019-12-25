@@ -1,5 +1,5 @@
 from django.contrib import admin
-from movies.models import Movie, MovieReview
+from movies.models import Movie, MovieReview, MovieFollow
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ('name', 'releasedate', 'runningtime', 'avgrating', 'director', 'publication',)
@@ -12,3 +12,4 @@ class MovieAdmin(admin.ModelAdmin):
 
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(MovieReview)
+admin.site.register(MovieFollow)
