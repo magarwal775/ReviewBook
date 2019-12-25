@@ -59,7 +59,7 @@ class Account(AbstractBaseUser):
     moviesfollowed= models.ManyToManyField(Movie)
     Following= models.ManyToManyField(settings.AUTH_USER_MODEL, related_name= 'Users being follwed+')
     FollowedBy= models.ManyToManyField(settings.AUTH_USER_MODEL,related_name= 'Users following+')
-
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name','dob']
 

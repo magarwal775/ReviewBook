@@ -23,18 +23,21 @@ def give_movie_review(request, movie_id):
     if not user.is_authenticated:
         return redirect('accounts:must_authenticate')
 
-    form = GiveReviewForm(request.POST or None)
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.movie = movie
-        obj.author = user
-        obj.save()
-        form = GiveReviewForm()
-        return redirect('movies:review_detail', obj.slug)
+    review = MovieReview.objects.filter(movie_id=movie_id, author=request.user)
+    if len(review)==0:
+        form = GiveReviewForm(request.POST or None)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.movie = movie
+            obj.author = user
+            obj.save()
+            form = GiveReviewForm()
+            return redirect('movies:review_detail', obj.slug)
 
-    context['form']=form
-
-    return render(request, 'give_movie_review.html', context)
+        context['form']=form
+        return render(request, 'give_movie_review.html', context)
+    else:
+        return redirect('movies:review_detail', review[0].slug)
 
 def select_movie(request):
 

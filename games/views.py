@@ -13,18 +13,22 @@ def give_game_review(request, game_id):
     if not user.is_authenticated:
         return redirect('accounts:must_authenticate')
 
-    form = GiveReviewForm(request.POST or None)
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.game = game
-        obj.author = user
-        obj.save()
-        form = GiveReviewForm()
-        return redirect('games:review_detail', obj.slug)
+    review = GameReview.objects.filter(game_id=game_id, author=request.user)
+    if len(review)==0:
+        form = GiveReviewForm(request.POST or None)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.game = game
+            obj.author = user
+            obj.save()
+            form = GiveReviewForm()
+            return redirect('games:review_detail', obj.slug)
 
-    context['form']=form
+        context['form']=form
 
-    return render(request, 'give_game_review.html', context)
+        return render(request, 'give_game_review.html', context)
+    else:
+        return redirect('games:review_detail', review[0].slug)
 
 def select_game(request):
     games = Game.objects.all()
