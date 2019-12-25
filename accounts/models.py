@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from movies.models import Movie, MovieFollow
+from django.conf import settings
 
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, username, first_name, last_name, dob,  password=None):
@@ -54,6 +56,9 @@ class Account(AbstractBaseUser):
     first_name =   models.CharField(max_length=100)
     last_name =    models.CharField(max_length=100)
     dob =          models.DateField()
+    moviesfollowed= models.ManyToManyField(Movie)
+    Following= models.ManyToManyField(settings.AUTH_USER_MODEL, related_name= 'Users being follwed+')
+    FollowedBy= models.ManyToManyField(settings.AUTH_USER_MODEL,related_name= 'Users following+')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name','last_name','dob']
@@ -68,3 +73,24 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_Label):
         return True
+
+class UserFollow(models.Model):
+    followed= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name= 'User being followed+')
+    follower= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name= 'User following+')
+
+    def __str__(self):
+        return self.follower.username + '->' + self.followed.username
+
+    def save(self,*args,**kwargs):
+        super(UserFollow, self).save(*args,**kwargs)
+        userfollowed = self.followed
+        userfollowing= self.follower
+        userfollowed.FollowedBy.add(self.follower)
+        userfollowing.Following.add(self.followed)
+
+    def delete(self,*args,**kwargs):
+        userfollowed = self.followed
+        userfollowing= self.follower
+        userfollowed.FollowedBy.remove(self.follower)
+        userfollowing.Following.remove(self.followed)
+        super(UserFollow,self).delete(*args,**kwargs)

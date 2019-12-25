@@ -30,6 +30,21 @@ class Movie(models.Model):
     def __str__(self):
         return self.name
 
+
+class MovieFollow(models.Model):
+    follower= models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    following= models.ForeignKey(Movie,on_delete=models.CASCADE)
+
+    def save(self,*args,**kwargs):
+        super(MovieFollow, self).save(*args,**kwargs)
+        user = self.follower
+        user.moviesfollowed.add(self.following)
+
+    def delete(self,*args,**kwargs):
+        user=self.follower
+        user.moviesfollowed.remove(self.following)
+        super(MovieFollow,self).delete(*args,**kwargs)
+
 class MovieReview(models.Model):
     title = models.CharField(max_length=50, null=False, blank=False)
     body = models.TextField(max_length=5000, null=False, blank=False)
