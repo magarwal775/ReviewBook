@@ -20,9 +20,12 @@
 		height: 100%;
 	}
 </style>
-<div class="main">
-	{% block content %}
 
+<div class="main">
+  {% block search %}
+  {% endblock search %}
+
+	{% block content %}
 	{% endblock content %}
 </div>
 <!-- End Body -->

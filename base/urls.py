@@ -11,4 +11,4 @@ app_name='base'
 urlpatterns = [
     path('', home, name="home"),
     path('selectcategory/', select_category, name="select_category"),
-]
+    ]
