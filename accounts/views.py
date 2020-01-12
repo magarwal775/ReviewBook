@@ -7,6 +7,7 @@ from games.models import GameReview
 from movies.models import MovieReview
 from series.models import EpisodeReview
 from accounts.models import UserFollow, Account
+from base.views import get_queryset
 
 def registration_view(request):
     context = {}
@@ -56,19 +57,21 @@ def login_view(request):
     context['login_form'] = form
     return render(request, 'account/login.html', context)
 
-def account_view(request):
+def account_view(request, slug):
 
     if not request.user.is_authenticated:
         return redirect("accounts:must_authenticate")
 
     context = {}
 
-    movie_review = MovieReview.objects.filter(author=request.user)
-    game_review = GameReview.objects.filter(author=request.user)
-    episode_review = EpisodeReview.objects.filter(author=request.user)
+    author = Account.objects.get(username=slug)
+    movie_review = MovieReview.objects.filter(author=author)
+    game_review = GameReview.objects.filter(author=author)
+    episode_review = EpisodeReview.objects.filter(author=author)
     context['movie_review'] = movie_review
     context['game_review'] = game_review
     context['episode_review'] = episode_review
+    context['user'] = author
 
     return render(request, "account_view.html", context)
 

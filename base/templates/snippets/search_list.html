@@ -1,0 +1,76 @@
+<style type="text/css">
+		.card{
+			max-width: 300px;
+		}
+		.card-body{
+			padding: 20px;
+		}
+</style>
+
+<!-- Search Result -->
+	{% if movies %}
+	  <h3>Movies</h3>
+	  {% for movie in movies %}
+	    <div class="card">
+	      <p>
+	      <a href="{% url 'movies:details' movie.id %}">
+	        <img class="card-img-top left-column inline" src="{{movie.image.url}}" width="100px" height="200px">
+	      </a>
+	      <a href="{% url 'movies:details' movie.id %}">
+	        <h2 class="card-title">{{movie.name}}</h2>
+	      </a>
+	      </p>
+	    </div>
+		{% endfor %}
+			<br>
+	{% endif %}
+
+	{% if games %}
+	  <h3>Games</h3>
+	  {% for game in games %}
+	    <div class="card">
+	      <p>
+	      <a href="{% url 'games:details' game.id %}">
+	        <img class="card-img-top left-column inline" src="{{game.image.url}}" width="80" height="100">
+	      </a>
+	      <a href="{% url 'games:details' game.id %}">
+	        <h2 class="card-title">{{game.name}}</h2>
+	      </a>
+	      </p>
+	    </div>
+		{% endfor %}
+			<br>
+	{% endif %}
+
+	{% if episodes %}
+	  <h3>Episodes</h3>
+	  {% for episode in episodes %}
+	    <div class="card">
+	      <p>
+	      <a href="#">
+	        <img class="card-img-top left-column inline" src="{{episode.image.url}}" width="60" height="120">
+	      </a>
+	      <a href="#">
+	        <h2 class="card-title">{{episode.episode_name}}</h2>
+	      </a>
+	      </p>
+	    </div>
+		{% endfor %}
+			<br>
+	{% endif %}
+
+	{% if users %}
+		<h3>Users</h3>
+	  {% for user in users %}
+			<div class="card">
+				<p>
+					<a href="{% url 'accounts:account_view' user.username %}"
+					<h2 class="card-title">{{user.first_name}} {{user.last_name}}</h2>
+					</a>
+				</p>
+			</div>
+		{% endfor %}
+			<br>
+	{% endif %}
+
+<!-- Search Result End -->
